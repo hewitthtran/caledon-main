@@ -134,15 +134,15 @@ module.exports.postPrimaryChecklist = async (req, res) => {
         }
     }
 
-    const allDefectsString = allDefects.filter(Boolean).join("\n");
+    const allDefectsString = allDefects.filter(Boolean);//.join("\n");
 
     const allPriorities = [
         p4779, p9023, p6700, p8001, p4402, p1324, p1325, p1326, pBelt, p4143, p4144, p4171,
         p4145, p4146, p4147, p4150, p4151, p2101, p4148, p4149, p6015, p2675, p4276
     ]
-    const allPrioritiesString = allPriorities.filter(Boolean).join("\n");
+    const allPrioritiesString = allPriorities.filter(Boolean);//.join("\n");
 
-    if (defectArray.length) {
+    /*if (defectArray.length) {
 
         await googleSheets.spreadsheets.values.append({
             auth,
@@ -156,7 +156,24 @@ module.exports.postPrimaryChecklist = async (req, res) => {
                 ]
             }
         })
+    }*/
+
+    for (let p = 0; p < defectArray.length; p++) {
+        if (defectArray.length) {
+            await googleSheets.spreadsheets.values.append({
+                auth,
+                spreadsheetID,
+                range: "Backlog-P!A:E",
+                valueInputOption: "USER_ENTERED",
+                resource: {
+                    values: [
+                        [date, employee, sections, allPrioritiesString[p], allDefectsString[p], '-',
+                    ]
+                ]
+            }
+        })
     }
+}
 
     // res.redirect("/");
     res.redirect("/primaryChecklist");

@@ -167,7 +167,7 @@ module.exports.postSandPlant1Checklist = async (req, res) => {
         }
     }
 
-    const allDefectsString = allDefects.filter(Boolean).join("\n");
+    const allDefectsString = allDefects.filter(Boolean);//.join("\n");
 
     const allPriorities = [
         // p4180, p4179, p4178, p0004, p9046,
@@ -178,9 +178,9 @@ module.exports.postSandPlant1Checklist = async (req, res) => {
         p2106, p4157, p4158, p2103, p4161, p4160, p2107,
         p4163, p4163_2, p2105,
     ]
-    const allPrioritiesString = allPriorities.filter(Boolean).join("\n");
+    const allPrioritiesString = allPriorities.filter(Boolean);//.join("\n");
 
-    if (defectArray.length) {
+    /*if (defectArray.length) {
 
         await googleSheets.spreadsheets.values.append({
             auth,
@@ -194,8 +194,24 @@ module.exports.postSandPlant1Checklist = async (req, res) => {
                 ]
             }
         })
-    }
+    }*/
 
+    for (let p = 0; p < defectArray.length; p++) {
+        if (defectArray.length) {
+            await googleSheets.spreadsheets.values.append({
+                auth,
+                spreadsheetID,
+                range: "Backlog-SP1!A:E",
+                valueInputOption: "USER_ENTERED",
+                resource: {
+                    values: [
+                        [date, employee, sections, allPrioritiesString[p], allDefectsString[p], '-',
+                    ]
+                ]
+            }
+        })
+    }
+}
     // res.redirect("/");
     res.redirect("/sandPlant1Checklist");
 }

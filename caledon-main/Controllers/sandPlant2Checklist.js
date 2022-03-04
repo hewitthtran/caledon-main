@@ -160,7 +160,7 @@ module.exports.postSandPlant2Checklist = async (req, res) => {
         }
     }
 
-    const allDefectsString = allDefects.filter(Boolean).join("\n");
+    const allDefectsString = allDefects.filter(Boolean);//.join("\n");
 
     const allPriorities = [
         // p4180, p4179, p4178, p0004, p9046,
@@ -168,9 +168,9 @@ module.exports.postSandPlant2Checklist = async (req, res) => {
         pTank, p4116, p4275, pMCCS, pScreens, p1332, p1331, pSCALE, pCS, p4165, p4166, p2108,
         p4169, p2110, p4168, p4170, p2108_2, p4172, p2109, p4167, p4277, p2113,
     ]
-    const allPrioritiesString = allPriorities.filter(Boolean).join("\n");
+    const allPrioritiesString = allPriorities.filter(Boolean);//.join("\n");
 
-    if (defectArray.length) {
+    /*if (defectArray.length) {
 
         await googleSheets.spreadsheets.values.append({
             auth,
@@ -184,7 +184,24 @@ module.exports.postSandPlant2Checklist = async (req, res) => {
                 ]
             }
         })
+    }*/
+
+    for (let p = 0; p < defectArray.length; p++) {
+        if (defectArray.length) {
+            await googleSheets.spreadsheets.values.append({
+                auth,
+                spreadsheetID,
+                range: "Backlog-SP2!A:E",
+                valueInputOption: "USER_ENTERED",
+                resource: {
+                    values: [
+                        [date, employee, sections, allPrioritiesString[p], allDefectsString[p], '-',
+                    ]
+                ]
+            }
+        })
     }
+}
 
     // res.redirect("/");
     res.redirect("/sandPlant2Checklist");
